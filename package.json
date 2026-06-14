@@ -1,0 +1,30 @@
+{
+  "name": "skill-hub",
+  "version": "1.0.0",
+  "description": "AI agent skill package manager — install, manage and share skills across agents",
+  "type": "module",
+  "bin": {
+    "skh": "./cli/index.js"
+  },
+  "scripts": {
+    "lint": "eslint cli/ scripts/ --ext .js",
+    "format": "prettier --write cli/ scripts/",
+    "validate": "node scripts/validate-skill.js --all"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "fuse.js": "^7.0.0",
+    "inquirer": "^10.2.2",
+    "js-yaml": "^4.1.0",
+    "ora": "^8.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

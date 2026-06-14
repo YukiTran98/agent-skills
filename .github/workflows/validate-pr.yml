@@ -1,0 +1,46 @@
+name: Validate Skill PR
+
+on:
+  pull_request:
+    paths:
+      - 'skills/**'
+      - 'skills.yaml'
+
+jobs:
+  validate:
+    name: Validate changed skills
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get changed skill names
+        id: changed
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '^skills/|^skills\.yaml' || true)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+
+      - name: Validate all skills
+        run: node scripts/validate-skill.js --all
+
+      - name: Post comment on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ **Skill validation failed.** Chạy `skh validate` để xem chi tiết lỗi và fix trước khi merge.'
+            })

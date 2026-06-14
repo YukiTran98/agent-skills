@@ -1,0 +1,60 @@
+name: PR Labeler
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  label:
+    name: Auto-label PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            const filenames = files.map(f => f.filename);
+            const labels = new Set();
+
+            // Group labels
+            const groupPatterns = {
+              'GENERAL': /^skills\/general\//,
+              'DA': /^skills\/da\//,
+              'DE': /^skills\/de\//,
+              'DS': /^skills\/ds\//,
+            };
+            for (const [label, pattern] of Object.entries(groupPatterns)) {
+              if (filenames.some(f => pattern.test(f))) labels.add(label);
+            }
+
+            // Change type labels
+            const newSkillFiles = files.filter(f => f.status === 'added' && /\/SKILL\.md$/.test(f.filename));
+            const modifiedSkills = files.filter(f => f.status === 'modified' && /\/SKILL\.md$/.test(f.filename));
+            const onlyYaml = filenames.every(f => f === 'skills.yaml');
+
+            if (newSkillFiles.length > 0) labels.add('new-skill');
+            if (modifiedSkills.length > 0) labels.add('update');
+            if (onlyYaml) labels.add('meta');
+
+            if (labels.size > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: [...labels]
+              });
+            }

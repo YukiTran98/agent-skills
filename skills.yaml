@@ -1,0 +1,79 @@
+- name: git-workflow
+  display_name: Git Workflow
+  group: GENERAL
+  tags:
+    - git
+    - workflow
+    - branching
+  description: "Git branching strategies, commit conventions, merge vs rebase, conflict resolution"
+  version: "1.0.0"
+  author: loitv
+  agents:
+    - claude-code
+    - kiro
+  file: skills/general/git-workflow/SKILL.md
+  docs: docs/skills/git-workflow.md
+
+- name: code-review
+  display_name: Code Review
+  group: GENERAL
+  tags:
+    - review
+    - quality
+    - best-practices
+  description: "Structured code review checklist for correctness, security, and maintainability"
+  version: "1.0.0"
+  author: loitv
+  agents:
+    - claude-code
+    - kiro
+  file: skills/general/code-review/SKILL.md
+  docs: docs/skills/code-review.md
+
+- name: eda-starter
+  display_name: EDA Starter
+  group: DA
+  tags:
+    - eda
+    - pandas
+    - visualization
+    - data-analysis
+  description: "Exploratory Data Analysis starter — profiling, missing values, distributions, correlations"
+  version: "1.0.0"
+  author: loitv
+  agents:
+    - claude-code
+  file: skills/da/eda-starter/SKILL.md
+  docs: docs/skills/eda-starter.md
+
+- name: sql-optimization
+  display_name: SQL Query Optimization
+  group: DE
+  tags:
+    - sql
+    - performance
+    - database
+  description: "Optimize SQL queries for large datasets — indexes, query plans, anti-patterns"
+  version: "1.0.0"
+  author: loitv
+  agents:
+    - claude-code
+    - kiro
+  file: skills/de/sql-optimization/SKILL.md
+  docs: docs/skills/sql-optimization.md
+
+- name: ml-training-checklist
+  display_name: ML Training Checklist
+  group: DS
+  tags:
+    - machine-learning
+    - training
+    - checklist
+    - mlops
+  description: "Pre/post training checklist — data split, baseline, metrics, overfitting, reproducibility"
+  version: "1.0.0"
+  author: loitv
+  agents:
+    - claude-code
+  file: skills/ds/ml-training-checklist/SKILL.md
+  docs: docs/skills/ml-training-checklist.md
